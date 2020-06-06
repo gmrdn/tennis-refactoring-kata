@@ -27,6 +27,9 @@ func (game *tennisGame1) WonPoint(playerName string) {
 func (game *tennisGame1) isEqualScore() bool {
 	return game.mScore1 == game.mScore2
 }
+func (game *tennisGame1) isEndGame() bool {
+	return game.mScore1 >= 4 || game.mScore2 >= 4
+}
 
 func (game *tennisGame1) getEqualScore(score int) string {
 	textualScore := ""
@@ -43,42 +46,53 @@ func (game *tennisGame1) getEqualScore(score int) string {
 	return textualScore
 }
 
+func (game *tennisGame1) getEndGameScore() string {
+	scoreDifference := game.mScore1 - game.mScore2
+	score := ""
+	if scoreDifference == 1 {
+		score = "Advantage player1"
+	} else if scoreDifference == -1 {
+		score = "Advantage player2"
+	} else if scoreDifference >= 2 {
+		score = "Win for player1"
+	} else {
+		score = "Win for player2"
+	}
+	return score
+}
+
+func (game *tennisGame1) getEarlyGameScore() string {
+	score := ""
+	tempScore := 0
+	for i := 1; i < 3; i++ {
+		if i == 1 {
+			tempScore = game.mScore1
+		} else {
+			score += "-"
+			tempScore = game.mScore2
+		}
+		switch tempScore {
+		case 0:
+			score += "Love"
+		case 1:
+			score += "Fifteen"
+		case 2:
+			score += "Thirty"
+		case 3:
+			score += "Forty"
+		}
+	}
+	return score
+}
 
 func (game *tennisGame1) GetScore() string {
 	score := ""
-	tempScore := 0
 	if game.isEqualScore() {
 		score = game.getEqualScore(game.mScore1)
-	} else if game.mScore1 >= 4 || game.mScore2 >= 4 {
-		minusResult := game.mScore1 - game.mScore2
-		if minusResult == 1 {
-			score = "Advantage player1"
-		} else if minusResult == -1 {
-			score = "Advantage player2"
-		} else if minusResult >= 2 {
-			score = "Win for player1"
-		} else {
-			score = "Win for player2"
-		}
+	} else if game.isEndGame() {
+		score = game.getEndGameScore()
 	} else {
-		for i := 1; i < 3; i++ {
-			if i == 1 {
-				tempScore = game.mScore1
-			} else {
-				score += "-"
-				tempScore = game.mScore2
-			}
-			switch tempScore {
-			case 0:
-				score += "Love"
-			case 1:
-				score += "Fifteen"
-			case 2:
-				score += "Thirty"
-			case 3:
-				score += "Forty"
-			}
-		}
+		score = game.getEarlyGameScore()
 	}
 	return score
 }
