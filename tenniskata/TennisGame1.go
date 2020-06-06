@@ -37,27 +37,46 @@ func (game *tennisGame1) isEndGame() bool {
 }
 
 func (game *tennisGame1) getEqualScore(score int) string {
-	textualScore := ""
+	gameScore := ""
 	if score < 3 {
-		textualScore = getTextualScore(score) + "-All"
+		gameScore = getTextualScore(score) + "-All"
 	} else {
-		textualScore = "Deuce"
+		gameScore = "Deuce"
 	}
-	return textualScore
+	return gameScore
 }
 
-func (game *tennisGame1) getEndGameScore() string {
-	scoreDifference := game.mScore1 - game.mScore2
-	score := ""
-	if scoreDifference == 1 {
-		score = "Advantage player1"
-	} else if scoreDifference == -1 {
-		score = "Advantage player2"
-	} else if scoreDifference >= 2 {
-		score = "Win for player1"
-	} else {
-		score = "Win for player2"
+func abs(x int) int {
+	if x < 0 {
+		return -x
 	}
+	return x
+}
+
+func (game *tennisGame1) getLeadingPlayer() string {
+	if game.mScore1 - game.mScore2 > 0 {
+		return game.player1Name
+	} 
+	return game.player2Name
+}
+
+func (game *tennisGame1) getAbsoluteScoreDifference() int {
+	scoreDifference := game.mScore1 - game.mScore2
+	if scoreDifference < 0 {
+		return -scoreDifference
+	}
+	return scoreDifference
+} 
+
+func (game *tennisGame1) getEndGameScore() string {
+	score := ""
+	if game.getAbsoluteScoreDifference() == 1 {
+		score = "Advantage " + game.getLeadingPlayer()
+	} else {
+		score = "Win for " + game.getLeadingPlayer()
+	}
+	
+
 	return score
 }
 
