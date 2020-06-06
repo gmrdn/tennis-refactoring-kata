@@ -1,10 +1,5 @@
 package tenniskata
 
-const scoreZero = "Love"
-const scoreOne = "Fifteen"
-const scoreTwo = "Thirty"
-const scoreThree = "Forty"
-
 type tennisGame1 struct {
 	mScore1    int
 	mScore2    int
@@ -19,6 +14,11 @@ func TennisGame1(player1Name string, player2Name string) TennisGame {
 		player2Name: player2Name}
 
 	return game
+}
+
+func getTextualScore(score int) string {
+	textualScores := []string{"Love", "Fifteen", "Thirty", "Forty"}
+	return textualScores[score]
 }
 
 func (game *tennisGame1) WonPoint(playerName string) {
@@ -38,14 +38,9 @@ func (game *tennisGame1) isEndGame() bool {
 
 func (game *tennisGame1) getEqualScore(score int) string {
 	textualScore := ""
-	switch score {
-	case 0:
-		textualScore = scoreZero + "-All"
-	case 1:
-		textualScore = scoreOne + "-All"
-	case 2:
-		textualScore = scoreTwo + "-All"
-	default:
+	if score < 3 {
+		textualScore = getTextualScore(score) + "-All"
+	} else {
 		textualScore = "Deuce"
 	}
 	return textualScore
@@ -67,26 +62,7 @@ func (game *tennisGame1) getEndGameScore() string {
 }
 
 func (game *tennisGame1) getEarlyGameScore() string {
-	score := ""
-	tempScore := 0
-	for i := 1; i < 3; i++ {
-		if i == 1 {
-			tempScore = game.mScore1
-		} else {
-			score += "-"
-			tempScore = game.mScore2
-		}
-		switch tempScore {
-		case 0:
-			score += scoreZero
-		case 1:
-			score += scoreOne
-		case 2:
-			score += scoreTwo
-		case 3:
-			score += scoreThree
-		}
-	}
+	score := getTextualScore(game.mScore1) + "-" + getTextualScore(game.mScore2)
 	return score
 }
 
