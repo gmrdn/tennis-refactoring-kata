@@ -1,5 +1,10 @@
 package tenniskata
 
+const scoreZero = "Love"
+const scoreOne = "Fifteen"
+const scoreTwo = "Thirty"
+const scoreThree = "Forty"
+
 type tennisGame1 struct {
 	mScore1    int
 	mScore2    int
@@ -35,11 +40,11 @@ func (game *tennisGame1) getEqualScore(score int) string {
 	textualScore := ""
 	switch score {
 	case 0:
-		textualScore = "Love-All"
+		textualScore = scoreZero + "-All"
 	case 1:
-		textualScore = "Fifteen-All"
+		textualScore = scoreOne + "-All"
 	case 2:
-		textualScore = "Thirty-All"
+		textualScore = scoreTwo + "-All"
 	default:
 		textualScore = "Deuce"
 	}
@@ -73,13 +78,13 @@ func (game *tennisGame1) getEarlyGameScore() string {
 		}
 		switch tempScore {
 		case 0:
-			score += "Love"
+			score += scoreZero
 		case 1:
-			score += "Fifteen"
+			score += scoreOne
 		case 2:
-			score += "Thirty"
+			score += scoreTwo
 		case 3:
-			score += "Forty"
+			score += scoreThree
 		}
 	}
 	return score
