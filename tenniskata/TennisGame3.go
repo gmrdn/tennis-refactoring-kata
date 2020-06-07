@@ -42,9 +42,8 @@ func (game *tennisGame3) pointsDifference() int {
 }
 
 func (game *tennisGame3) GetScore() string {
-	var gameScore string
 	if game.isEarlyGame() {
-		gameScore = game.getTextualScore(game.scorePlayer1)
+		gameScore := game.getTextualScore(game.scorePlayer1)
 		if game.isTie() {
 			return gameScore + "-All"
 		}
