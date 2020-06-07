@@ -1,49 +1,71 @@
 package tenniskata
 
 type tennisGame3 struct {
-	p2  int
-	p1  int
-	p1N string
-	p2N string
+	scorePlayer1 int
+	scorePlayer2 int
+	namePlayer1  string
+	namePlayer2  string
 }
 
-func TennisGame3(p1N string, p2N string) TennisGame {
+// TennisGame3 creates a game with two player names
+func TennisGame3(namePlayer1 string, namePlayer2 string) TennisGame {
 	game := &tennisGame3{
-		p1N: p1N,
-		p2N: p2N}
+		namePlayer1: namePlayer1,
+		namePlayer2: namePlayer2}
 
 	return game
 }
 
-func (game *tennisGame3) GetScore() string {
-	var s string
-	if game.p1 < 4 && game.p2 < 4 && !(game.p1+game.p2 == 6) {
-		p := []string{"Love", "Fifteen", "Thirty", "Forty"}
-		s = p[game.p1]
-		if game.p1 == game.p2 {
-			return s + "-All"
-		}
-		return s + "-" + p[game.p2]
-	} else {
-		if game.p1 == game.p2 {
-			return "Deuce"
-		}
-		if game.p1 > game.p2 {
-			s = game.p1N
-		} else {
-			s = game.p2N
-		}
-		if (game.p1-game.p2)*(game.p1-game.p2) == 1 {
-			return "Advantage " + s
-		}
-		return "Win for " + s
+func (game *tennisGame3) getTextualScore(points int) string {
+	textualScores := []string{"Love", "Fifteen", "Thirty", "Forty"}
+	return textualScores[points]
+}
+
+func (game *tennisGame3) isTie() bool {
+	return game.scorePlayer1 == game.scorePlayer2
+}
+
+func (game *tennisGame3) isEarlyGame() bool {
+	return game.scorePlayer1 < 4 && game.scorePlayer2 < 4 && !(game.scorePlayer1+game.scorePlayer2 == 6)
+}
+
+func (game *tennisGame3) whoIsLeading() string {
+	if game.scorePlayer1 > game.scorePlayer2 {
+		return game.namePlayer1
 	}
+	return game.namePlayer2
+
+}
+
+func (game *tennisGame3) pointsDifference() int {
+	return (game.scorePlayer1 - game.scorePlayer2) * (game.scorePlayer1 - game.scorePlayer2)
+}
+
+func (game *tennisGame3) GetScore() string {
+	var gameScore string
+	if game.isEarlyGame() {
+		gameScore = game.getTextualScore(game.scorePlayer1)
+		if game.isTie() {
+			return gameScore + "-All"
+		}
+		return gameScore + "-" + game.getTextualScore(game.scorePlayer2)
+	}
+
+	if game.isTie() {
+		return "Deuce"
+	}
+
+	if game.pointsDifference() == 1 {
+		return "Advantage " + game.whoIsLeading()
+	}
+	return "Win for " + game.whoIsLeading()
+
 }
 
 func (game *tennisGame3) WonPoint(playerName string) {
-	if playerName == "player1" {
-		game.p1 += 1
+	if playerName == game.namePlayer1 {
+		game.scorePlayer1++
 	} else {
-		game.p2 += 1
+		game.scorePlayer2++
 	}
 }
