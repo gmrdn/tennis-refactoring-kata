@@ -35,6 +35,20 @@ func (game *tennisGame2) isLateGameP1() bool  {
 	return game.P1point >= 3
 }
 
+func (game *tennisGame2) isLateGameP2() bool  {
+	return game.P2point >= 3
+}
+
+
+func (game *tennisGame2) isAdvantageP1() bool  {
+	return game.P1point > game.P2point
+}
+
+func (game *tennisGame2) isAdvantageP2() bool  {
+	return game.P1point < game.P2point
+}
+
+
 func (game *tennisGame2) getTextualScore(point int) string {
 	textualScores := []string{"Love", "Fifteen", "Thirty", "Forty"}
 	return textualScores[point]
@@ -51,31 +65,31 @@ func (game *tennisGame2) GetScore() string {
 		score = "Deuce"
 	}
 
-	if game.P1point > game.P2point && game.isEarlyGameP1() {
+	if game.isAdvantageP1() && game.isEarlyGameP1() {
 		game.P1res = game.getTextualScore(game.P1point)
 		game.P2res = game.getTextualScore(game.P2point)
 		score = game.P1res + "-" + game.P2res
 	}
 
-	if game.P1point < game.P2point && game.isEarlyGameP2() {
+	if game.isAdvantageP2() && game.isEarlyGameP2() {
 		game.P1res = game.getTextualScore(game.P1point)
 		game.P2res = game.getTextualScore(game.P2point)
 		score = game.P1res + "-" + game.P2res
 	}
 
-	if game.P1point > game.P2point && game.P2point >= 3 {
-		score = "Advantage player1"
+	if game.isAdvantageP1() && game.isLateGameP2() {
+		score = "Advantage " + game.player1Name
 	}
 
-	if game.P2point > game.P1point && game.P1point >= 3 {
-		score = "Advantage player2"
+	if game.isAdvantageP2() && game.isLateGameP1() {
+		score = "Advantage " + game.player2Name
 	}
 
 	if game.P1point >= 4 && game.P2point >= 0 && (game.P1point-game.P2point) >= 2 {
-		score = "Win for player1"
+		score = "Win for " + game.player1Name
 	}
 	if game.P2point >= 4 && game.P1point >= 0 && (game.P2point-game.P1point) >= 2 {
-		score = "Win for player2"
+		score = "Win for " + game.player2Name
 	}
 	return score
 }
