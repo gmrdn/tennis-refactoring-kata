@@ -18,25 +18,35 @@ func TennisGame2(player1Name string, player2Name string) TennisGame {
 	return game
 }
 
+func (game *tennisGame2) isEquality() bool {
+	return game.P1point == game.P2point
+}
+
+func (game *tennisGame2) isEarlyGameP1() bool {
+	return game.P1point < 4
+}
+
+func (game *tennisGame2) isLateGameP1() bool  {
+	return game.P1point >= 3
+}
+
+func (game *tennisGame2) getTextualScore(point int) string {
+	textualScores := []string{"Love", "Fifteen", "Thirty", "Forty"}
+	return textualScores[point]
+}
+
 func (game *tennisGame2) GetScore() string {
 	score := ""
-	if game.P1point == game.P2point && game.P1point < 4 {
-		if game.P1point == 0 {
-			score = "Love"
-		}
-		if game.P1point == 1 {
-			score = "Fifteen"
-		}
-		if game.P1point == 2 {
-			score = "Thirty"
-		}
+	if game.isEquality() && game.isEarlyGameP1() {
+		score = game.getTextualScore(game.P1point)
 		score += "-All"
 	}
-	if game.P1point == game.P2point && game.P1point >= 3 {
+
+	if game.isEquality() && game.isLateGameP1() {
 		score = "Deuce"
 	}
 
-	if game.P1point > 0 && game.P2point == 0 {
+	if game.P1point > game.P2point && game.P1point < 4 {
 		if game.P1point == 1 {
 			game.P1res = "Fifteen"
 		}
@@ -46,31 +56,8 @@ func (game *tennisGame2) GetScore() string {
 		if game.P1point == 3 {
 			game.P1res = "Forty"
 		}
-
-		game.P2res = "Love"
-		score = game.P1res + "-" + game.P2res
-	}
-	if game.P2point > 0 && game.P1point == 0 {
-		if game.P2point == 1 {
-			game.P2res = "Fifteen"
-		}
-		if game.P2point == 2 {
-			game.P2res = "Thirty"
-		}
-		if game.P2point == 3 {
-			game.P2res = "Forty"
-		}
-
-		game.P1res = "Love"
-		score = game.P1res + "-" + game.P2res
-	}
-
-	if game.P1point > game.P2point && game.P1point < 4 {
-		if game.P1point == 2 {
-			game.P1res = "Thirty"
-		}
-		if game.P1point == 3 {
-			game.P1res = "Forty"
+		if game.P2point == 0 {
+			game.P2res = "Love"
 		}
 		if game.P2point == 1 {
 			game.P2res = "Fifteen"
@@ -81,11 +68,17 @@ func (game *tennisGame2) GetScore() string {
 		score = game.P1res + "-" + game.P2res
 	}
 	if game.P2point > game.P1point && game.P2point < 4 {
+		if game.P2point == 1 {
+			game.P2res = "Fifteen"
+		}
 		if game.P2point == 2 {
 			game.P2res = "Thirty"
 		}
 		if game.P2point == 3 {
 			game.P2res = "Forty"
+		}
+		if game.P1point == 0 {
+			game.P1res = "Love"
 		}
 		if game.P1point == 1 {
 			game.P1res = "Fifteen"
