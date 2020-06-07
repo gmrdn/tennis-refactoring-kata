@@ -26,6 +26,11 @@ func (game *tennisGame2) isEarlyGameP1() bool {
 	return game.P1point < 4
 }
 
+func (game *tennisGame2) isEarlyGameP2() bool {
+	return game.P2point < 4
+}
+
+
 func (game *tennisGame2) isLateGameP1() bool  {
 	return game.P1point >= 3
 }
@@ -46,46 +51,15 @@ func (game *tennisGame2) GetScore() string {
 		score = "Deuce"
 	}
 
-	if game.P1point > game.P2point && game.P1point < 4 {
-		if game.P1point == 1 {
-			game.P1res = "Fifteen"
-		}
-		if game.P1point == 2 {
-			game.P1res = "Thirty"
-		}
-		if game.P1point == 3 {
-			game.P1res = "Forty"
-		}
-		if game.P2point == 0 {
-			game.P2res = "Love"
-		}
-		if game.P2point == 1 {
-			game.P2res = "Fifteen"
-		}
-		if game.P2point == 2 {
-			game.P2res = "Thirty"
-		}
+	if game.P1point > game.P2point && game.isEarlyGameP1() {
+		game.P1res = game.getTextualScore(game.P1point)
+		game.P2res = game.getTextualScore(game.P2point)
 		score = game.P1res + "-" + game.P2res
 	}
-	if game.P2point > game.P1point && game.P2point < 4 {
-		if game.P2point == 1 {
-			game.P2res = "Fifteen"
-		}
-		if game.P2point == 2 {
-			game.P2res = "Thirty"
-		}
-		if game.P2point == 3 {
-			game.P2res = "Forty"
-		}
-		if game.P1point == 0 {
-			game.P1res = "Love"
-		}
-		if game.P1point == 1 {
-			game.P1res = "Fifteen"
-		}
-		if game.P1point == 2 {
-			game.P1res = "Thirty"
-		}
+
+	if game.P1point < game.P2point && game.isEarlyGameP2() {
+		game.P1res = game.getTextualScore(game.P1point)
+		game.P2res = game.getTextualScore(game.P2point)
 		score = game.P1res + "-" + game.P2res
 	}
 
@@ -106,34 +80,10 @@ func (game *tennisGame2) GetScore() string {
 	return score
 }
 
-func (game *tennisGame2) SetP1Score(number int) {
-
-	for i := 0; i < number; i++ {
-		game.P1Score()
-	}
-
-}
-
-func (game *tennisGame2) SetP2Score(number int) {
-
-	for i := 0; i < number; i++ {
-		game.P2Score()
-	}
-
-}
-
-func (game *tennisGame2) P1Score() {
-	game.P1point++
-}
-
-func (game *tennisGame2) P2Score() {
-	game.P2point++
-}
-
 func (game *tennisGame2) WonPoint(player string) {
-	if player == "player1" {
-		game.P1Score()
+	if player == game.player1Name {
+		game.P1point++
 	} else {
-		game.P2Score()
+		game.P2point++
 	}
 }
